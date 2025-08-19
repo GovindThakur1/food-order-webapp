@@ -1,11 +1,13 @@
 package com.govind.foodorder.service.image;
 
+import com.govind.foodorder.dto.ImageDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.FoodItem;
 import com.govind.foodorder.model.Image;
 import com.govind.foodorder.repository.ImageRepository;
 import com.govind.foodorder.service.food.FoodItemService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +23,7 @@ public class ImageService implements IImageService {
 
     private final ImageRepository imageRepository;
     private final FoodItemService foodItemService;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -46,7 +49,7 @@ public class ImageService implements IImageService {
                 Image savedImage = imageRepository.save(image);
 
                 // building download url using the id of saved image
-                String buildDownloadUrl = "api/images/image/download/";
+                String buildDownloadUrl = "/api/images/image/download/";
                 String downloadUrl = buildDownloadUrl + savedImage.getId();
                 savedImage.setDownloadUrl(downloadUrl);
 
@@ -82,5 +85,10 @@ public class ImageService implements IImageService {
                     throw new ResourceNotFoundException("Image not found");
                 });
 
+    }
+
+    @Override
+    public ImageDto convertImageToImageDto(Image image) {
+        return modelMapper.map(image, ImageDto.class);
     }
 }

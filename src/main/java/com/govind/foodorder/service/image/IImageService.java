@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.image;
 
+import com.govind.foodorder.dto.ImageDto;
 import com.govind.foodorder.model.Image;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,5 +15,7 @@ public interface IImageService {
     void updateImage(MultipartFile file, Long imageId);
 
     void deleteImageById(Long id);
+
+    ImageDto convertImageToImageDto(Image image);
 
 }
