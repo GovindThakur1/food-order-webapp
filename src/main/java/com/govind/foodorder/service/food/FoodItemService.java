@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.food;
 
+import com.govind.foodorder.dto.FoodItemDto;
 import com.govind.foodorder.exception.AlreadyExistsException;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Category;
@@ -11,6 +12,7 @@ import com.govind.foodorder.request.AddFoodItemRequest;
 import com.govind.foodorder.request.UpdateFoodItemRequest;
 import com.govind.foodorder.service.restaurant.IRestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class FoodItemService implements IFoodItemService {
     private final FoodItemRepository foodRepository;
     private final CategoryRepository categoryRepository;
     private final IRestaurantService restaurantService;
+    private final ModelMapper modelMapper;
 
 
     @Override
@@ -114,5 +117,10 @@ public class FoodItemService implements IFoodItemService {
     @Override
     public List<FoodItem> getFoodItemsByCategory(String categoryName) {
         return foodRepository.findByCategoryName(categoryName);
+    }
+
+    @Override
+    public FoodItemDto convertToDto(FoodItem foodItem) {
+        return modelMapper.map(foodItem, FoodItemDto.class);
     }
 }

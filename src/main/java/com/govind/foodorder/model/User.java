@@ -24,6 +24,7 @@ public abstract class User {
     @NaturalId
     private String email;
     private String phone;
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

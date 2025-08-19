@@ -1,5 +1,6 @@
 package com.govind.foodorder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -20,10 +21,16 @@ public class Customer extends User {
 
     private String address;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
+
+    public void assignCart(Cart cart) {
+        this.cart = cart;
+        cart.setCustomer(this);
+    }
 
 }

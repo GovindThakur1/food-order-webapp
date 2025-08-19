@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.restaurant;
 
+import com.govind.foodorder.dto.RestaurantDto;
 import com.govind.foodorder.model.Restaurant;
 import com.govind.foodorder.request.AddRestaurantRequest;
 import com.govind.foodorder.request.UpdateRestaurantRequest;
@@ -19,5 +20,7 @@ public interface IRestaurantService {
     Restaurant updateRestaurant(UpdateRestaurantRequest request, Long restaurantId);
 
     void deleteRestaurantById(Long id);
+
+    RestaurantDto convertToRestaurantDto(Restaurant restaurant);
 
 }

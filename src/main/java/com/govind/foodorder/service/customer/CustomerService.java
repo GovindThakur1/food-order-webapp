@@ -36,6 +36,7 @@ public class CustomerService implements ICustomerService {
                             .address(request.getAddress())
                             .phone(request.getPhone())
                             .email(email)
+                            .password(request.getPassword())
                             .role(role)
                             .build();
 

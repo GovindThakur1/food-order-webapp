@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.food;
 
+import com.govind.foodorder.dto.FoodItemDto;
 import com.govind.foodorder.model.FoodItem;
 import com.govind.foodorder.request.AddFoodItemRequest;
 import com.govind.foodorder.request.UpdateFoodItemRequest;
@@ -25,5 +26,7 @@ public interface IFoodItemService {
     List<FoodItem> getFoodItemsByRestaurantAndName(String restaurantName, String foodName);
 
     List<FoodItem> getFoodItemsByCategory(String categoryName);
+
+    FoodItemDto convertToDto(FoodItem foodItem);
 
 }

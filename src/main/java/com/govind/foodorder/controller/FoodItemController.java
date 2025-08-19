@@ -1,5 +1,6 @@
 package com.govind.foodorder.controller;
 
+import com.govind.foodorder.dto.FoodItemDto;
 import com.govind.foodorder.exception.AlreadyExistsException;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.FoodItem;
@@ -39,7 +40,8 @@ public class FoodItemController {
     public ResponseEntity<ApiResponse> getFoodItemById(@PathVariable Long foodId) {
         try {
             FoodItem foodItem = foodItemService.getFoodItemById(foodId);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItem));
+            FoodItemDto foodItemDto = foodItemService.convertToDto(foodItem);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItemDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

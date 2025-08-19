@@ -56,6 +56,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                     .email(defaultEmail)
                     .phone("1234567890")
                     .adminLevel(AdminLevel.STAFF)
+                    .password("1234")
                     .role(adminRole)
                     .build();
             adminRepository.save(admin);
@@ -79,6 +80,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                     .phone("1234567890")
                     .address("Ktm")
                     .role(adminRole)
+                    .password("1234")
                     .build();
             customerRepository.save(customer);
         }
