@@ -1,5 +1,6 @@
 package com.govind.foodorder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Role {
     private Long id;
     private String name;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "role")
     private Collection<User> users = new HashSet<>();
 

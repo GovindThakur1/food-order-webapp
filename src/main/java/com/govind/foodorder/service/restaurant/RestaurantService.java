@@ -1,7 +1,7 @@
 package com.govind.foodorder.service.restaurant;
 
 import com.govind.foodorder.exception.AlreadyExistsException;
-import com.govind.foodorder.exception.ResourceNotFound;
+import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Restaurant;
 import com.govind.foodorder.repository.RestaurantRepository;
 import com.govind.foodorder.request.AddRestaurantRequest;
@@ -41,13 +41,13 @@ public class RestaurantService implements IRestaurantService {
     @Override
     public Restaurant getRestaurantById(Long id) {
         return restaurantRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Restaurant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
     }
 
     @Override
     public Restaurant getRestaurantByAddress(String address) {
         return Optional.ofNullable(restaurantRepository.findByAddress(address))
-                .orElseThrow(() -> new ResourceNotFound("Restaurant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
 
     }
 
@@ -63,14 +63,14 @@ public class RestaurantService implements IRestaurantService {
                         restaurant.setTagline(request.getTagline());
                     return restaurantRepository.save(restaurant);
                 })
-                .orElseThrow(() -> new ResourceNotFound("Restaurant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Restaurant not found"));
     }
 
     @Override
     public void deleteRestaurantById(Long id) {
         restaurantRepository.findById(id)
                 .ifPresentOrElse(restaurantRepository::delete, () -> {
-                    throw new ResourceNotFound("Restaurant not found");
+                    throw new ResourceNotFoundException("Restaurant not found");
                 });
     }
 }

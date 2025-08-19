@@ -1,7 +1,7 @@
 package com.govind.foodorder.controller;
 
 import com.govind.foodorder.exception.AlreadyExistsException;
-import com.govind.foodorder.exception.ResourceNotFound;
+import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Restaurant;
 import com.govind.foodorder.request.AddRestaurantRequest;
 import com.govind.foodorder.request.UpdateRestaurantRequest;
@@ -47,7 +47,7 @@ public class RestaurantController {
         try {
             Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
             return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurant));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -57,7 +57,7 @@ public class RestaurantController {
         try {
             Restaurant restaurant = restaurantService.getRestaurantByAddress(address);
             return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurant));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -68,7 +68,7 @@ public class RestaurantController {
         try {
             Restaurant restaurant = restaurantService.updateRestaurant(request, restaurantId);
             return ResponseEntity.ok(new ApiResponse("Updated", restaurant));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
@@ -78,7 +78,7 @@ public class RestaurantController {
         try {
             restaurantService.deleteRestaurantById(restaurantId);
             return ResponseEntity.ok(new ApiResponse("Restaurant deleted", null));
-        } catch (ResourceNotFound e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
