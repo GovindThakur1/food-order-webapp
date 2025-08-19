@@ -1,5 +1,6 @@
 package com.govind.foodorder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class Image {
     private Blob image;
     private String downloadUrl;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "food_id")
     private FoodItem foodItem;

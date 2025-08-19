@@ -1,5 +1,6 @@
 package com.govind.foodorder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,10 +20,10 @@ public class FoodItem {
     private Long id;
     private String name;
     private BigDecimal price;
-    private int inventory;
     private String description;
 
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
@@ -35,10 +36,9 @@ public class FoodItem {
     private Category category;
 
 
-    public FoodItem(String name, BigDecimal price, int inventory, String description, Restaurant restaurant, Category category) {
+    public FoodItem(String name, BigDecimal price, String description, Restaurant restaurant, Category category) {
         this.name = name;
         this.price = price;
-        this.inventory = inventory;
         this.description = description;
         this.restaurant = restaurant;
         this.category = category;
