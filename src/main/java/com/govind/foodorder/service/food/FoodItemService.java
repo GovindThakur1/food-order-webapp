@@ -123,4 +123,9 @@ public class FoodItemService implements IFoodItemService {
     public FoodItemDto convertToDto(FoodItem foodItem) {
         return modelMapper.map(foodItem, FoodItemDto.class);
     }
+
+    @Override
+    public List<FoodItemDto> convertToDto(List<FoodItem> foodItems) {
+        return foodItems.stream().map(this::convertToDto).toList();
+    }
 }

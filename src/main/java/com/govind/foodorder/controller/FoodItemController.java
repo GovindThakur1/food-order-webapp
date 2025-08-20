@@ -28,7 +28,8 @@ public class FoodItemController {
     public ResponseEntity<ApiResponse> addFoodItem(@RequestBody AddFoodItemRequest request, @PathVariable Long restaurantId) {
         try {
             FoodItem foodItem = foodItemService.addFood(request, restaurantId);
-            return ResponseEntity.status(CREATED).body(new ApiResponse("Food item added", foodItem));
+            FoodItemDto foodItemDto = foodItemService.convertToDto(foodItem);
+            return ResponseEntity.status(CREATED).body(new ApiResponse("Food item added", foodItemDto));
         } catch (AlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         } catch (ResourceNotFoundException e) {
@@ -51,9 +52,12 @@ public class FoodItemController {
     public ResponseEntity<ApiResponse> getAllFoodItems() {
         try {
             List<FoodItem> allFoodItems = foodItemService.getAllFoodItems();
+
             if (allFoodItems.isEmpty())
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No any food item found", null));
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", allFoodItems));
+
+            List<FoodItemDto> foodItemDtos = foodItemService.convertToDto(allFoodItems);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItemDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -63,7 +67,8 @@ public class FoodItemController {
     public ResponseEntity<ApiResponse> updateFoodItem(@RequestBody UpdateFoodItemRequest request, @PathVariable Long foodId) {
         try {
             FoodItem foodItem = foodItemService.updateFoodItem(request, foodId);
-            return ResponseEntity.ok(new ApiResponse("Updated", foodItem));
+            FoodItemDto foodItemDto = foodItemService.convertToDto(foodItem);
+            return ResponseEntity.ok(new ApiResponse("Updated", foodItemDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -87,7 +92,8 @@ public class FoodItemController {
             if (foodItems.isEmpty())
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Food item with such name not found", null));
 
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItems));
+            List<FoodItemDto> foodItemDtos = foodItemService.convertToDto(foodItems);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItemDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -101,7 +107,8 @@ public class FoodItemController {
             if (foodItems.isEmpty())
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Food item in this restaurant name not found", null));
 
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItems));
+            List<FoodItemDto> foodItemDtos = foodItemService.convertToDto(foodItems);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItemDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -118,6 +125,7 @@ public class FoodItemController {
                 return ResponseEntity.status(NOT_FOUND)
                         .body(new ApiResponse("Food item with this name and restaurant not found", null));
 
+            List<FoodItemDto> foodItemDtos = foodItemService.convertToDto(foodItems);
             return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItems));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
@@ -132,7 +140,8 @@ public class FoodItemController {
             if (foodItems.isEmpty())
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Food item with this category not found", null));
 
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItems));
+            List<FoodItemDto> foodItemDtos = foodItemService.convertToDto(foodItems);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", foodItemDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }

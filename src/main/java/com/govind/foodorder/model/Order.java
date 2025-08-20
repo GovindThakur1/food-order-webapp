@@ -33,4 +33,14 @@ public class Order {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
+
+    public Order(LocalDate orderDate, OrderStatus orderStatus, Customer customer, Restaurant restaurant) {
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.customer = customer;
+        this.restaurant = restaurant;
+    }
 }

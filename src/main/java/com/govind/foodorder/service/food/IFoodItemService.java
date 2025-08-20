@@ -29,4 +29,6 @@ public interface IFoodItemService {
 
     FoodItemDto convertToDto(FoodItem foodItem);
 
+    List<FoodItemDto> convertToDto(List<FoodItem> foodItems);
+
 }

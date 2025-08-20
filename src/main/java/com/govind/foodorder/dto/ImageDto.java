@@ -1,6 +1,5 @@
 package com.govind.foodorder.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
