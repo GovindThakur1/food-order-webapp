@@ -68,7 +68,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
         Role adminRole = roleRepository.findByName("ROLE_CUSTOMER")
                 .orElseThrow(() -> new RuntimeException("ROLE_CUSTOMER not found"));
 
-        for (int i = 3; i <= 7; i++) {
+        for (int i = 3; i <= 4; i++) {
             String defaultEmail = "customer" + i + "@gmail.com";
             if (customerRepository.existsByEmail(defaultEmail))
                 continue;

@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.cartitem;
 
+import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.CartItem;
 import com.govind.foodorder.model.FoodItem;
@@ -9,6 +10,7 @@ import com.govind.foodorder.service.cart.CartService;
 import com.govind.foodorder.service.food.FoodItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,18 +46,36 @@ public class CartItemService implements ICartItemService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
     public void removeFoodItemFromCart(Long cartId, Long foodId) {
-
+        Cart cart = cartService.getCart(cartId);
+        CartItem itemToRemove = getCartItem(cartId, foodId);
+        cart.removeCartItem(itemToRemove);
+//        cartRepository.save(cart); // while using transactional, no need to call save because jpa returns the managed entity
     }
 
+    @Transactional
     @Override
     public void updateCartItemQuantity(Long cartId, Long foodId, int quantity) {
-
+        cartItemRepository.findByCartId(cartId)
+                .stream()
+                .filter(cartItem -> cartItem.getFoodItem().getId().equals(foodId))
+                .findFirst()
+                .map(cartItem -> {
+                    cartItem.setQuantity(quantity);
+                    cartItem.setTotalPrice();
+                    return cartItem;
+                })
+                .orElseThrow(() -> new ResourceNotFoundException("Thh food item not found in the cart"));
     }
 
     @Override
     public CartItem getCartItem(Long cartId, Long productId) {
-        return null;
+        return cartItemRepository.findByCartId(cartId)
+                .stream()
+                .filter(cartItem -> cartItem.getFoodItem().getId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
     }
 }

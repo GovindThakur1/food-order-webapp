@@ -2,6 +2,7 @@ package com.govind.foodorder.controller;
 
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Cart;
+import com.govind.foodorder.model.CartItem;
 import com.govind.foodorder.model.Customer;
 import com.govind.foodorder.response.ApiResponse;
 import com.govind.foodorder.service.cart.CartService;
@@ -26,7 +27,7 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> addItemToCart(@PathVariable Long foodId,
                                                      @RequestParam int quantity) {
         try {
-            Customer customer = customerService.getCustomerById(8L);
+            Customer customer = customerService.getCustomerById(5L);
             Cart cart = cartService.getCartForCustomerOrInitialize(customer);
 
             cartItemService.addFoodItemToCart(cart.getId(), foodId, quantity);
@@ -35,6 +36,39 @@ public class CartItemController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/item/cart/{cartId}")
+    public ResponseEntity<ApiResponse> removeFoodItemFromCart(@PathVariable Long cartId, @RequestParam Long foodId) {
+        try {
+            cartItemService.removeFoodItemFromCart(cartId, foodId);
+            return ResponseEntity.ok(new ApiResponse("Removed cart item", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/item/cart/{cartId}/food/{foodId}/update")
+    public ResponseEntity<ApiResponse> updateFoodItemQuantityInCart(@PathVariable Long cartId,
+                                                                    @PathVariable Long foodId,
+                                                                    @RequestParam int quantity) {
+        try {
+            cartItemService.updateCartItemQuantity(cartId, foodId, quantity);
+            return ResponseEntity.ok(new ApiResponse("Updated cart item quantity", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+
+    @GetMapping("/item/cart/{cartId}")
+    public ResponseEntity<ApiResponse> getCartItem(@PathVariable Long cartId, @RequestParam Long foodId) {
+        try {
+            CartItem cartItem = cartItemService.getCartItem(cartId, foodId);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", cartItem));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
 

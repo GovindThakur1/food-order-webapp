@@ -51,7 +51,7 @@ public class CartController {
         }
     }
 
-    @GetMapping("/cart/user/{customerId}")
+    @GetMapping("/cart/customer/{customerId}")
     public ResponseEntity<ApiResponse> getCartByCustomerId(@PathVariable Long customerId) {
         try {
             Cart cart = cartService.getCartByCustomerId(customerId);

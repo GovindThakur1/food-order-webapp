@@ -3,6 +3,10 @@ package com.govind.foodorder.repository;
 import com.govind.foodorder.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     void deleteAllByCartId(Long cartId);
+
+    List<CartItem> findByCartId(Long cartId);
 }
