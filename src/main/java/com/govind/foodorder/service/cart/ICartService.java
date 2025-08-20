@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.cart;
 
+import com.govind.foodorder.dto.CartDto;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.Customer;
 
@@ -16,5 +17,7 @@ public interface ICartService {
     Cart getCartByCustomerId(Long customerId);
 
     Cart getCartForCustomerOrInitialize(Customer customer);
+
+    CartDto convertToCartDto(Cart cart);
 
 }

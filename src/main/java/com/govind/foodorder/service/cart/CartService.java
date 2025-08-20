@@ -1,11 +1,13 @@
 package com.govind.foodorder.service.cart;
 
+import com.govind.foodorder.dto.CartDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.Customer;
 import com.govind.foodorder.repository.CartRepository;
 import com.govind.foodorder.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ public class CartService implements ICartService {
 
     private final CartRepository cartRepository;
     private final CustomerRepository customerRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Cart getCart(Long id) {
@@ -55,5 +58,10 @@ public class CartService implements ICartService {
                     customerRepository.save(customer);
                     return cart;
                 });
+    }
+
+    @Override
+    public CartDto convertToCartDto(Cart cart) {
+        return modelMapper.map(cart, CartDto.class);
     }
 }

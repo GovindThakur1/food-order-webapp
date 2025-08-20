@@ -1,5 +1,6 @@
 package com.govind.foodorder.controller;
 
+import com.govind.foodorder.dto.CartItemDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.CartItem;
@@ -66,7 +67,8 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> getCartItem(@PathVariable Long cartId, @RequestParam Long foodId) {
         try {
             CartItem cartItem = cartItemService.getCartItem(cartId, foodId);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", cartItem));
+            CartItemDto cartItemDto = cartItemService.convertToCartItemDto(cartItem);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", cartItemDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

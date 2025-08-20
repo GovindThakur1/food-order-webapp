@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.cartitem;
 
+import com.govind.foodorder.dto.CartItemDto;
 import com.govind.foodorder.model.CartItem;
 
 public interface ICartItemService {
@@ -11,4 +12,6 @@ public interface ICartItemService {
     void updateCartItemQuantity(Long cartId, Long foodId, int quantity);
 
     CartItem getCartItem(Long cartId, Long productId);
+
+    CartItemDto convertToCartItemDto(CartItem cartItem);
 }

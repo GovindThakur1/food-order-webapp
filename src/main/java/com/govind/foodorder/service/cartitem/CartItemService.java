@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.cartitem;
 
+import com.govind.foodorder.dto.CartItemDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.CartItem;
@@ -9,6 +10,7 @@ import com.govind.foodorder.repository.CartRepository;
 import com.govind.foodorder.service.cart.CartService;
 import com.govind.foodorder.service.food.FoodItemService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class CartItemService implements ICartItemService {
     private final CartService cartService;
     private final FoodItemService foodItemService;
     private final CartRepository cartRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public void addFoodItemToCart(Long cartId, Long foodId, int quantity) {
@@ -77,5 +80,10 @@ public class CartItemService implements ICartItemService {
                 .filter(cartItem -> cartItem.getFoodItem().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Cart item not found"));
+    }
+
+    @Override
+    public CartItemDto convertToCartItemDto(CartItem cartItem) {
+        return modelMapper.map(cartItem, CartItemDto.class);
     }
 }
