@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.order;
 
+import com.govind.foodorder.dto.OrderDto;
 import com.govind.foodorder.enums.OrderStatus;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.*;
@@ -7,6 +8,7 @@ import com.govind.foodorder.repository.OrderRepository;
 import com.govind.foodorder.service.cart.CartService;
 import com.govind.foodorder.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final CustomerService customerService;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override
@@ -94,5 +97,10 @@ public class OrderService implements IOrderService {
                     return order;
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    }
+
+    @Override
+    public OrderDto convertToOrderDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
     }
 }

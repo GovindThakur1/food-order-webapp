@@ -1,5 +1,6 @@
 package com.govind.foodorder.controller;
 
+import com.govind.foodorder.dto.CustomerDto;
 import com.govind.foodorder.exception.AlreadyExistsException;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Customer;
@@ -27,7 +28,8 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> createCustomer(@RequestBody CreateCustomerRequest request) {
         try {
             Customer customer = customerService.createCustomer(request);
-            return ResponseEntity.status(CREATED).body(new ApiResponse("Customer created", customer));
+            CustomerDto customerDto = customerService.convertToCustomerDto(customer);
+            return ResponseEntity.status(CREATED).body(new ApiResponse("Customer created", customerDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (AlreadyExistsException e) {
@@ -39,7 +41,8 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> getAllCustomers() {
         try {
             List<Customer> customers = customerService.getAllCustomers();
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", customers));
+            List<CustomerDto> customerDtos = customerService.convertToCustomerDto(customers);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", customerDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -49,7 +52,8 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> getCustomerById(@PathVariable Long customerId) {
         try {
             Customer customer = customerService.getCustomerById(customerId);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", customer));
+            CustomerDto customerDto = customerService.convertToCustomerDto(customer);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", customerDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -59,7 +63,8 @@ public class CustomerController {
     public ResponseEntity<ApiResponse> updateCustomer(@RequestBody UpdateCustomerRequest request, @PathVariable Long customerId) {
         try {
             Customer customer = customerService.updateCustomer(request, customerId);
-            return ResponseEntity.ok(new ApiResponse("Updated", customer));
+            CustomerDto customerDto = customerService.convertToCustomerDto(customer);
+            return ResponseEntity.ok(new ApiResponse("Updated", customerDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

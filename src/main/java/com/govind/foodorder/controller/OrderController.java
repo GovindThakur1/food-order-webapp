@@ -1,5 +1,6 @@
 package com.govind.foodorder.controller;
 
+import com.govind.foodorder.dto.OrderDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Order;
 import com.govind.foodorder.response.ApiResponse;
@@ -23,7 +24,8 @@ public class OrderController {
     public ResponseEntity<ApiResponse> placeOrder(@PathVariable Long customerId) {
         try {
             Order order = orderService.placeOrder(customerId);
-            return ResponseEntity.status(CREATED).body(new ApiResponse("Order placed", order));
+            OrderDto orderDto = orderService.convertToOrderDto(order);
+            return ResponseEntity.status(CREATED).body(new ApiResponse("Order placed", orderDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -35,7 +37,8 @@ public class OrderController {
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
         try {
             Order order = orderService.getOrderById(orderId);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Order found", order));
+            OrderDto orderDto = orderService.convertToOrderDto(order);
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Order found", orderDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
@@ -47,7 +50,12 @@ public class OrderController {
             List<Order> ordersByCustomer = orderService.getOrdersByCustomer(customerId);
             if (ordersByCustomer.isEmpty())
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("Orders for this customer is not available", null));
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Orders found", ordersByCustomer));
+
+            List<OrderDto> orderDtos = ordersByCustomer.stream()
+                    .map(orderService::convertToOrderDto)
+                    .toList();
+
+            return ResponseEntity.status(FOUND).body(new ApiResponse("Orders found", orderDtos));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -57,7 +65,8 @@ public class OrderController {
     public ResponseEntity<ApiResponse> updateOrderStatusToPreparing(@PathVariable Long orderId) {
         try {
             Order order = orderService.updateOrderStatusToPreparing(orderId);
-            return ResponseEntity.ok(new ApiResponse("Order status updated", order));
+            OrderDto orderDto = orderService.convertToOrderDto(order);
+            return ResponseEntity.ok(new ApiResponse("Order status updated", orderDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }

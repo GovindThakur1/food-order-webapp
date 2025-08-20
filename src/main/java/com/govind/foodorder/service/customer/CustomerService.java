@@ -1,5 +1,6 @@
 package com.govind.foodorder.service.customer;
 
+import com.govind.foodorder.dto.CustomerDto;
 import com.govind.foodorder.exception.AlreadyExistsException;
 import com.govind.foodorder.exception.ResourceNotFoundException;
 import com.govind.foodorder.model.Customer;
@@ -9,6 +10,7 @@ import com.govind.foodorder.repository.RoleRepository;
 import com.govind.foodorder.request.CreateCustomerRequest;
 import com.govind.foodorder.request.UpdateCustomerRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class CustomerService implements ICustomerService {
 
     private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Customer createCustomer(CreateCustomerRequest request) {
@@ -79,5 +82,17 @@ public class CustomerService implements ICustomerService {
                 .ifPresentOrElse(customerRepository::delete, () -> {
                     throw new ResourceNotFoundException("Customer not found");
                 });
+    }
+
+    @Override
+    public CustomerDto convertToCustomerDto(Customer customer) {
+        return modelMapper.map(customer, CustomerDto.class);
+    }
+
+    @Override
+    public List<CustomerDto> convertToCustomerDto(List<Customer> customers) {
+        return customers.stream()
+                .map(this::convertToCustomerDto)
+                .toList();
     }
 }

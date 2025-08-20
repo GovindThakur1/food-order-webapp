@@ -28,9 +28,4 @@ public class Customer extends User {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
 
-    public void assignCart(Cart cart) {
-        this.cart = cart;
-        cart.setCustomer(this);
-    }
-
 }
