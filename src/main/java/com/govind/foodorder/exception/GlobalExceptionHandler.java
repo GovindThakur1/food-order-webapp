@@ -2,6 +2,7 @@ package com.govind.foodorder.exception;
 
 import com.govind.foodorder.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,6 +30,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleRestaurantNameNotMatch(RestaurantNameNotMatchException e) {
         return ResponseEntity
                 .status(BAD_REQUEST)
+                .body(new ApiResponse(e.getMessage(), null));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse> handleAuthenticationException(AuthenticationException e) {
+        return ResponseEntity
+                .status(UNAUTHORIZED)
                 .body(new ApiResponse(e.getMessage(), null));
     }
 

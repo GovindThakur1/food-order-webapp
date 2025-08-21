@@ -11,6 +11,7 @@ import com.govind.foodorder.request.CreateCustomerRequest;
 import com.govind.foodorder.request.UpdateCustomerRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CustomerService implements ICustomerService {
     private final CustomerRepository customerRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Customer createCustomer(CreateCustomerRequest request) {
@@ -39,7 +41,7 @@ public class CustomerService implements ICustomerService {
                             .address(request.getAddress())
                             .phone(request.getPhone())
                             .email(email)
-                            .password(request.getPassword())
+                            .password(passwordEncoder.encode(request.getPassword()))
                             .role(role)
                             .build();
 

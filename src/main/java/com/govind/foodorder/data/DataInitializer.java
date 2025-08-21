@@ -4,13 +4,13 @@ import com.govind.foodorder.enums.AdminLevel;
 import com.govind.foodorder.model.Admin;
 import com.govind.foodorder.model.Customer;
 import com.govind.foodorder.model.Role;
-import com.govind.foodorder.model.User;
 import com.govind.foodorder.repository.AdminRepository;
 import com.govind.foodorder.repository.CustomerRepository;
 import com.govind.foodorder.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
     private final RoleRepository roleRepository;
     private final AdminRepository adminRepository;
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -56,7 +57,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                     .email(defaultEmail)
                     .phone("1234567890")
                     .adminLevel(AdminLevel.STAFF)
-                    .password("1234")
+                    .password(passwordEncoder.encode("1234"))
                     .role(adminRole)
                     .build();
             adminRepository.save(admin);
@@ -80,7 +81,7 @@ public class DataInitializer implements ApplicationListener<ApplicationReadyEven
                     .phone("1234567890")
                     .address("Ktm")
                     .role(adminRole)
-                    .password("1234")
+                    .password(passwordEncoder.encode("1234"))
                     .build();
             customerRepository.save(customer);
         }
