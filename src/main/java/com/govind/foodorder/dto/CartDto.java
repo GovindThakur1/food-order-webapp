@@ -13,5 +13,6 @@ import java.util.Set;
 public class CartDto {
     private Long id;
     private BigDecimal totalAmount;
+    private String restaurantName;
     private Set<CartItemDto> cartItems;
 }

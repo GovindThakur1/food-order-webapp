@@ -34,6 +34,7 @@ public class CartService implements ICartService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
         cart.getCartItems().clear();
         cart.setTotalAmount(BigDecimal.ZERO);
+        cart.removeRestaurantName();
     }
 
     @Override
@@ -53,6 +54,7 @@ public class CartService implements ICartService {
                 .orElseGet(() -> {
                     Cart cart = new Cart();
                     cart.setCustomer(customer);
+                    cart.setRestaurantName(null);
                     cartRepository.save(cart);
                     customer.setCart(cart);
                     customerRepository.save(customer);

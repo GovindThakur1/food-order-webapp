@@ -2,6 +2,7 @@ package com.govind.foodorder.service.cartitem;
 
 import com.govind.foodorder.dto.CartItemDto;
 import com.govind.foodorder.exception.ResourceNotFoundException;
+import com.govind.foodorder.exception.RestaurantNameNotMatchException;
 import com.govind.foodorder.model.Cart;
 import com.govind.foodorder.model.CartItem;
 import com.govind.foodorder.model.FoodItem;
@@ -29,6 +30,11 @@ public class CartItemService implements ICartItemService {
         Cart cart = cartService.getCart(cartId);
         FoodItem foodItem = foodItemService.getFoodItemById(foodId);
 
+        if (cart.getRestaurantName() != null && (!cart.getRestaurantName().equals(foodItem.getRestaurant().getName()))) {
+            throw new RestaurantNameNotMatchException("You already have food from another restaurant in the cart. " +
+                    "The food should belong to the same restaurant.");
+        }
+
         CartItem cartItem = cart.getCartItems()
                 .stream()
                 .filter(existingCartItem -> existingCartItem.getFoodItem().getId().equals(foodId))
@@ -45,7 +51,7 @@ public class CartItemService implements ICartItemService {
         }
         cartItem.setTotalPrice();
         cart.addCartItem(cartItem);
-        // may be need cartitemresp.save(cartitem)
+        cart.setRestaurantName(foodItem.getRestaurant().getName());
         cartRepository.save(cart);
     }
 

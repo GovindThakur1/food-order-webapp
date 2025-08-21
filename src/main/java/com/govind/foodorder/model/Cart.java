@@ -22,11 +22,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private BigDecimal totalAmount = BigDecimal.ZERO;
+    private String restaurantName;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> cartItems = new HashSet<>();
 
-//    @JsonBackReference
+    //    @JsonBackReference
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -54,4 +55,7 @@ public class Cart {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void removeRestaurantName() {
+        this.restaurantName = null;
+    }
 }
