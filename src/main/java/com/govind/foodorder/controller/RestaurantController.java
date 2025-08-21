@@ -25,71 +25,47 @@ public class RestaurantController {
 
     @PostMapping("/restaurant/create")
     public ResponseEntity<ApiResponse> addRestaurant(@RequestBody AddRestaurantRequest request) {
-        try {
-            Restaurant createdRestaurant = restaurantService.addRestaurant(request);
-            RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(createdRestaurant);
-            return ResponseEntity.status(CREATED).body(new ApiResponse("Restaurant created", restaurantDto));
-        } catch (AlreadyExistsException e) {
-            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
-        }
+        Restaurant createdRestaurant = restaurantService.addRestaurant(request);
+        RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(createdRestaurant);
+        return ResponseEntity.status(CREATED).body(new ApiResponse("Restaurant created", restaurantDto));
     }
 
     @GetMapping("/restaurant/all")
     public ResponseEntity<ApiResponse> getAllRestaurants() {
-        try {
-            List<Restaurant> restaurants = restaurantService.getAllRestaurants();
-            List<RestaurantDto> restaurantDtos = restaurants.stream()
-                    .map(restaurantService::convertToRestaurantDto)
-                    .toList();
+        List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+        List<RestaurantDto> restaurantDtos = restaurants.stream()
+                .map(restaurantService::convertToRestaurantDto)
+                .toList();
 
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDtos));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDtos));
     }
 
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<ApiResponse> getRestaurantById(@PathVariable Long restaurantId) {
-        try {
-            Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
-            RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDto));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
+        Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
+        RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDto));
     }
 
     @GetMapping("/restaurant/by/address")
     public ResponseEntity<ApiResponse> getRestaurantByAddress(@RequestParam String address) {
-        try {
-            Restaurant restaurant = restaurantService.getRestaurantByAddress(address);
-            RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
-            return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDto));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
+        Restaurant restaurant = restaurantService.getRestaurantByAddress(address);
+        RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("Found", restaurantDto));
     }
 
     @PutMapping("/restaurant/{restaurantId}/update")
     public ResponseEntity<ApiResponse> updateRestaurant(@RequestBody UpdateRestaurantRequest request,
                                                         @PathVariable Long restaurantId) {
-        try {
-            Restaurant restaurant = restaurantService.updateRestaurant(request, restaurantId);
-            RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
-            return ResponseEntity.ok(new ApiResponse("Updated", restaurantDto));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
+        Restaurant restaurant = restaurantService.updateRestaurant(request, restaurantId);
+        RestaurantDto restaurantDto = restaurantService.convertToRestaurantDto(restaurant);
+        return ResponseEntity.ok(new ApiResponse("Updated", restaurantDto));
     }
 
     @DeleteMapping("/restaurant/{restaurantId}/delete")
     public ResponseEntity<ApiResponse> deleteRestaurant(@PathVariable Long restaurantId) {
-        try {
-            restaurantService.deleteRestaurantById(restaurantId);
-            return ResponseEntity.ok(new ApiResponse("Restaurant deleted", null));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
-        }
+        restaurantService.deleteRestaurantById(restaurantId);
+        return ResponseEntity.ok(new ApiResponse("Restaurant deleted", null));
     }
 
 }

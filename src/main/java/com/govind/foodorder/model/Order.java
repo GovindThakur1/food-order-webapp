@@ -37,6 +37,10 @@ public class Order {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "review_id")
+    private Review review;
+
     public Order(LocalDate orderDate, OrderStatus orderStatus, Customer customer, Restaurant restaurant) {
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
